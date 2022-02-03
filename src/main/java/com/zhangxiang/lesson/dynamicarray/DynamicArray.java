@@ -145,7 +145,7 @@ public class DynamicArray<T> {
             throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
         }
         T removeValue = elements[index];
-        for (int i = index + 1; i <= size - 1; i++) {
+        for (int i = index + 1; i < size; i++) {
             elements[i - 1] = elements[i];
         }
         elements[--size] = null;

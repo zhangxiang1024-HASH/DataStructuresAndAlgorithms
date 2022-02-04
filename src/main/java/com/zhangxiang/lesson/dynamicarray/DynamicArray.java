@@ -1,14 +1,14 @@
 package com.zhangxiang.lesson.dynamicarray;
 
+import com.zhangxiang.lesson.common.AbstractList;
+
 /**
  * @author: zhangxiang
  * @createTime: 2022年02月03日 17:47:22
- * @desc: 手写动态数组(类似ArrayList)
+ * @desc: 顺序表
  */
-public class DynamicArray<T> {
+public class DynamicArray<T> extends AbstractList<T> {
     private static final int DEFAULT_CAPACITY = 8;
-    private static final int DEFAULT_ELEMENT_NOT_FOUND = -1;
-    private int size;
     private T[] elements;
 
     public DynamicArray(int capacity) {
@@ -16,33 +16,33 @@ public class DynamicArray<T> {
         this.elements = (T[]) new Object[capacity];
     }
 
-    public DynamicArray(){
+    public DynamicArray() {
         this(DEFAULT_CAPACITY);
     }
 
 
     /**
      * 获取index位置的元素
+     *
      * @param index
      * @return
      */
+    @Override
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-        }
+        rangeCheck(index);
         return elements[index];
     }
 
     /**
      * 设置index位置的元素为element，并返回旧值
+     *
      * @param index
      * @param element
      * @return
      */
+    @Override
     public T set(int index, T element) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-        }
+        rangeCheck(index);
         T old = elements[index];
         elements[index] = element;
         return old;
@@ -50,9 +50,11 @@ public class DynamicArray<T> {
 
     /**
      * 获取元素element在数组中的索引
+     *
      * @param element
      * @return
      */
+    @Override
     public int indexOf(T element) {
         if (element == null) {
             for (int i = 0; i < size; i++) {
@@ -71,17 +73,9 @@ public class DynamicArray<T> {
     }
 
     /**
-     * 是否包含某个元素
-     * @param element
-     * @return
-     */
-    public boolean contains(T element) {
-        return indexOf(element) != DEFAULT_ELEMENT_NOT_FOUND;
-    }
-
-    /**
      * 逻辑清空数组
      */
+    @Override
     public void clear() {
         for (int i = 0; i < size; i++) {
             elements[i] = null;
@@ -89,27 +83,9 @@ public class DynamicArray<T> {
         size = 0;
     }
 
-    public int size(){
-        return size;
-    }
-
-    public boolean isEmpty(){
-        return size == 0;
-    }
-
-
-    /**
-     * 添加
-     * @param element
-     */
-    public void add(T element) {
-        add(size, element);
-    }
-
+    @Override
     public void add(int index, T element) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-        }
+        rangeCheckForAdd(index);
         ensureCapacity(size + 1);
         for (int i = size - 1; i >= index; i--) {
             elements[i + 1] = elements[i];
@@ -120,6 +96,7 @@ public class DynamicArray<T> {
 
     /**
      * 扩容
+     *
      * @param capacity
      */
     private void ensureCapacity(int capacity) {
@@ -137,13 +114,13 @@ public class DynamicArray<T> {
 
     /**
      * 删除index位置的元素，并返回其值
+     *
      * @param index
      * @return
      */
+    @Override
     public T remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-        }
+        rangeCheck(index);
         T removeValue = elements[index];
         for (int i = index + 1; i < size; i++) {
             elements[i - 1] = elements[i];

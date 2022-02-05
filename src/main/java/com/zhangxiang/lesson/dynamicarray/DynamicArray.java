@@ -23,7 +23,7 @@ public class DynamicArray<T> extends AbstractList<T> {
 
     /**
      * 获取index位置的元素
-     *
+     * 时间复杂度：O(1)
      * @param index
      * @return
      */
@@ -35,7 +35,7 @@ public class DynamicArray<T> extends AbstractList<T> {
 
     /**
      * 设置index位置的元素为element，并返回旧值
-     *
+     * 时间复杂度：O(1)
      * @param index
      * @param element
      * @return
@@ -83,6 +83,15 @@ public class DynamicArray<T> extends AbstractList<T> {
         size = 0;
     }
 
+    /**
+     * 增加元素
+     * 时间复杂度：
+     *  最好：O(1)
+     *  最坏：O(n)
+     *  平均：O(n)
+     * @param index
+     * @param element
+     */
     @Override
     public void add(int index, T element) {
         rangeCheckForAdd(index);
@@ -114,7 +123,10 @@ public class DynamicArray<T> extends AbstractList<T> {
 
     /**
      * 删除index位置的元素，并返回其值
-     *
+     * 时间复杂度：
+     *  最好：O(1)
+     *  最坏：O(n)
+     *  平均：O(n)
      * @param index
      * @return
      */

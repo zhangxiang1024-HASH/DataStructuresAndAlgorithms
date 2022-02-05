@@ -5,11 +5,12 @@ import com.zhangxiang.lesson.common.AbstractList;
 /**
  * @author: zhangxiang
  * @createTime: 2022年02月04日 12:42:53
- * @desc: 双链表
+ * @desc: 双向循环链表
  */
-public class LinkedList<T> extends AbstractList<T> {
+public class CircleLinkedList<T> extends AbstractList<T> {
     private Node<T> first;
     private Node<T> last;
+    private Node<T> current;
 
     private static class Node<T> {
         T element;
@@ -81,22 +82,25 @@ public class LinkedList<T> extends AbstractList<T> {
     public void add(int index, T element) {
         rangeCheckForAdd(index);
         if (index == size) {//在最后面添加
-            Node<T> node = new Node<>(element, null, last);
+            Node<T> node = new Node<>(element, first, last);
             last = node;
             if (size == 0) { //链表第一个元素
                 first = node;
+                //循环 自己指向自己
+                first.next = first;
+                first.prev = first;
             } else {
                 node.prev.next = node;
+                first.prev = last;
             }
         } else {
             Node<T> next = getNode(index);
             Node<T> prev = next.prev;
             Node<T> node = new Node<>(element, next, prev);
             next.prev = node;
-            if (prev == null) {
+            prev.next = node;
+            if (index == 0) {
                 first = node;
-            } else {
-                prev.next = node;
             }
         }
         size++;
@@ -109,21 +113,53 @@ public class LinkedList<T> extends AbstractList<T> {
     @Override
     public T remove(int index) {
         rangeCheck(index);
-        Node<T> node = getNode(index);
-        Node<T> prev = node.prev;
-        Node<T> next = node.next;
-        if (prev == null) {
-            first = next;
+        return remove(getNode(index));
+    }
+
+    private T remove(Node<T> node) {
+        if (size == 1) {
+            first = null;
+            last = null;
         } else {
+            Node<T> prev = node.prev;
+            Node<T> next = node.next;
             prev.next = next;
-        }
-        if (next == null) {
-            last = prev;
-        } else {
             next.prev = prev;
+            if (node == first) {//删除第一个节点
+                first = next;
+            }
+            if (node == last) {//删除的最后一个节点
+                last = prev;
+            }
         }
         size--;
         return node.element;
+    }
+
+    public T removeCurrent() {
+        if (current == null) {
+            return null;
+        }
+        Node<T> next = current.next;
+        T element = remove(current);
+        if (size == 0) {
+            current = null;
+        } else {
+            current = current.next;
+        }
+        return element;
+    }
+
+    public void resetCurrent() {
+        current = first;
+    }
+
+    public Node<T> currentNext() {
+        if (current == null) {
+            return null;
+        }
+        current = current.next;
+        return current;
     }
 
     private Node<T> getNode(int index) {

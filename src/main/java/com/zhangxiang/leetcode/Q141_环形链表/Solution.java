@@ -1,6 +1,6 @@
-package com.zhangxiang.leetcode.链表.Q141_环形链表;
+package com.zhangxiang.leetcode.Q141_环形链表;
 
-import com.zhangxiang.leetcode.链表.common.ListNode;
+import com.zhangxiang.leetcode.common.ListNode;
 
 /**
  * @author: zhangxiang

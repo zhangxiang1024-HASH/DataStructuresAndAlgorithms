@@ -1,4 +1,4 @@
-package com.zhangxiang.leetcode.链表.Q20_有效的括号;
+package com.zhangxiang.leetcode.Q20_有效的括号;
 
 import java.util.HashMap;
 import java.util.Map;

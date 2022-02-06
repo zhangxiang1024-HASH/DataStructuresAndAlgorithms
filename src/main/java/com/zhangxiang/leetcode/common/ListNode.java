@@ -1,4 +1,4 @@
-package com.zhangxiang.leetcode.链表.common;
+package com.zhangxiang.leetcode.common;
 
 
 /**

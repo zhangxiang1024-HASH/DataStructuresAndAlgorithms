@@ -1,6 +1,6 @@
-package com.zhangxiang.leetcode.链表.Q206_反转链表;
+package com.zhangxiang.leetcode.Q206_反转链表;
 
-import com.zhangxiang.leetcode.链表.common.ListNode;
+import com.zhangxiang.leetcode.common.ListNode;
 
 /**
  * @author: zhangxiang

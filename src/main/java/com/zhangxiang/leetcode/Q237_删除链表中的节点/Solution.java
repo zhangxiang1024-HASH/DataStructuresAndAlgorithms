@@ -1,6 +1,6 @@
-package com.zhangxiang.leetcode.链表.Q237_删除链表中的节点;
+package com.zhangxiang.leetcode.Q237_删除链表中的节点;
 
-import com.zhangxiang.leetcode.链表.common.ListNode;
+import com.zhangxiang.leetcode.common.ListNode;
 
 /**
  * @author: zhangxiang

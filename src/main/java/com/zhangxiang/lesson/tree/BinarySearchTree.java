@@ -74,7 +74,52 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     }
 
     public void remove(E element) {
+        Node<E> node = node(element);
+        if(node == null){
+            return;
+        }
+        if(node.hasTwoChildren()){//度为2的节点
+            //找到它的前驱或者后继节点  这里用后继节点
+            Node<E> successor = successor(node);
+            node.element = successor.element; //用后继节点的值覆盖要删除节点的值，然后删除后继节点
+            node = successor;
+        }
+        //找出替代 被删除节点 的节点
+        Node<E> replacementNode = node.left == null ? node.right : node.left;
+        if(replacementNode != null){//删除的是度为1的节点
+            //首先维护parent值
+            replacementNode.parent = node.parent;
+            if(node.parent == null){
+                root = replacementNode;
+            }else if (node == node.parent.left){
+                node.parent.left = replacementNode;
+            }else {
+                node.parent.right = replacementNode;
+            }
+        }else {//删除的是叶子节点
+            if(node.parent == null){//root节点
+                root = null;
+            }else if(node == node.parent.left){
+                node.parent.left = null;
+            }else {
+                node.parent.right = null;
+            }
+        }
+    }
 
+    private Node<E> node(E element) {
+        Node<E> node = root;
+        while (node != null) {
+            int cmp = compare(element, node.element);
+            if (cmp == 0) {
+                return node;
+            } else if (cmp > 0) {
+                node = node.right;
+            } else {
+                node = node.left;
+            }
+        }
+        return null;
     }
 
     public boolean contains(E Element) {
@@ -130,6 +175,14 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
          */
         public boolean isLeaf() {
             return left == null && right == null;
+        }
+
+        /**
+         * 有两个孩子节点
+         * @return
+         */
+        public boolean hasTwoChildren() {
+            return left != null && right != null;
         }
     }
 

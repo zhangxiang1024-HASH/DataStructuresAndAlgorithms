@@ -10,7 +10,7 @@ import com.zhangxiang.lesson.tree.printer.BinaryTrees;
  */
 public class BinarySearchTreeMain {
     public static void main(String[] args) {
-        Integer[] data = new Integer[]{7,4,9,2,5,8,11,3};
+        Integer[] data = new Integer[]{7,4,9,2,5,8,11,1};
         BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
         /*BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>(new Comparator<Integer>() {
             @Override
@@ -32,5 +32,6 @@ public class BinarySearchTreeMain {
         binarySearchTree.levelOrderTraversal(node -> System.out.println(node.element));
 
         System.out.println(binarySearchTree.height());
+        System.out.println(binarySearchTree.isComplete());
     }
 }

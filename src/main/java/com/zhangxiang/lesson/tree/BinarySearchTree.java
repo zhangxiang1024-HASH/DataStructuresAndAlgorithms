@@ -122,6 +122,15 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
             this.element = element;
             this.parent = parent;
         }
+
+        /**
+         * 是否是叶子节点
+         *
+         * @return
+         */
+        public boolean isLeaf() {
+            return left == null && right == null;
+        }
     }
 
     /**
@@ -261,5 +270,89 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
             }
         }
         return height;
+    }
+
+    /**
+     * 判断是否是完全二叉树
+     *
+     * @return
+     */
+    public boolean isComplete() {
+        if (root == null) {
+            return false;
+        }
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean leaf = false;//叶子节点的标志位
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll();
+            if (leaf && !node.isLeaf()) {
+                return false;
+            }
+            if (node.left != null) {
+                queue.offer(node.left);
+            } else if (node.right != null) {
+                return false;
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            } else {
+                //以后全是叶子节点
+                leaf = true;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 前驱节点
+     *
+     * @param node
+     * @return
+     */
+    private Node<E> predecessor(Node<E> node) {
+        if (node == null) {
+            return null;
+        }
+        node = node.left;
+        if (node != null) {
+            while (node.right != null) {
+                node = node.right;
+            }
+            return node;
+        }
+        //左子树没有 找父节点
+        while (node.parent != null && node == node.parent.left) {
+            node = node.parent;
+        }
+        //node.parent == null
+        // node == node.parent.right
+        return node.parent;
+    }
+
+    /**
+     * 后继节点
+     *
+     * @param node
+     * @return
+     */
+    private Node<E> successor(Node<E> node) {
+        if (node == null) {
+            return null;
+        }
+        node = node.right;
+        if (node != null) {
+            while (node.left != null) {
+                node = node.left;
+            }
+            return node;
+        }
+        //右子树没有 找父节点
+        while (node.parent != null && node == node.parent.right) {
+            node = node.parent;
+        }
+        //node.parent == null
+        // node == node.parent.left
+        return node.parent;
     }
 }

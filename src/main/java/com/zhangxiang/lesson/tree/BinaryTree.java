@@ -300,6 +300,28 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         public boolean hasTwoChildren() {
             return left != null && right != null;
         }
+
+        /**
+         * 判断是否是左孩子
+         *
+         * @return
+         */
+        public boolean isLeftChild() {
+            return parent != null && this == parent.left;
+        }
+
+        /**
+         * 判断是否是右孩子
+         *
+         * @return
+         */
+        public boolean isRightChild() {
+            return parent != null && this == parent.right;
+        }
+    }
+
+    protected Node<E> createNode(E element, Node<E> parent) {
+        return new Node<>(element, parent);
     }
 
     @FunctionalInterface

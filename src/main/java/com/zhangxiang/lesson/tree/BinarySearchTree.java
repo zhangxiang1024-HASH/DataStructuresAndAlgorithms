@@ -21,8 +21,9 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
     public void add(E element) {
         elementNotNullCheck(element);
         if (root == null) {
-            root = new Node<>(element, null);
+            root = createNode(element, null);
             size++;
+            afterAdd(root);
             return;
         }
         Node<E> parent = root;
@@ -39,13 +40,21 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
                 return;
             }
         }
-        Node<E> newNode = new Node<>(element, parent);
+        Node<E> newNode = createNode(element, parent);
         if (compare > 0) {
             parent.right = newNode;
         } else {
             parent.left = newNode;
         }
         size++;
+        afterAdd(newNode);
+    }
+
+    /**
+     * 添加之后的操作
+     * @param node
+     */
+    protected void afterAdd(Node<E> node){
     }
 
     private int compare(E element1, E element2) {

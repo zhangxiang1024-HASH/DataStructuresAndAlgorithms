@@ -18,12 +18,15 @@ public class AVLTree<E> extends BinarySearchTree<E> {
 
     @Override
     protected void afterAdd(Node<E> node) {
-        while ((node = node.parent) != null){
+        while ((node = node.parent) != null) {
             //平衡
-            if(isBalanced(node)){
+            if (isBalanced(node)) {
                 //更新高度
-            }else {//不平衡
+                updateHeight(node);
+            } else {//不平衡
                 //恢复平衡
+                reBalance(node);
+                break;
             }
         }
     }
@@ -35,6 +38,60 @@ public class AVLTree<E> extends BinarySearchTree<E> {
     private void reBalance(Node<E> grand) {
         Node<E> parent = ((AVLNode<E>) grand).tallerChild();
         Node<E> node = ((AVLNode<E>) parent).tallerChild();
+        if (parent.isLeftChild()) {
+            if (node.isLeftChild()) { //LL 右旋转
+                rotateRight(grand);
+            } else {//LR 先对p进行RR左旋转，再对g进行LL右旋转
+                rotateLeft(parent);
+                rotateRight(grand);
+            }
+        } else {
+            if (node.isRightChild()) { //RR 左旋转
+                rotateLeft(grand);
+            } else {//RL 先对p进行LL右旋转，再对g进行RR左旋转
+                rotateRight(parent);
+                rotateLeft(grand);
+            }
+        }
+    }
+
+    /**
+     * 左旋转
+     * @param grand
+     */
+    private void rotateLeft(Node<E> grand){
+        Node<E> parent = grand.right;
+        Node<E> child = parent.left;
+        grand.right = child;
+        parent.left = grand;
+
+        //更新 parent的parent
+        parent.parent = grand.parent;
+        if(grand.isLeftChild()){
+            grand.parent.left = parent;
+        }else if(grand.isRightChild()){
+            grand.parent.right = parent;
+        }else {//根节点
+            root = parent;
+        }
+        //更新child的 parent
+        if(child != null){
+            child.parent = grand ;
+        }
+        //更新grand的parent
+        grand.parent = parent;
+
+        //更新高度
+        updateHeight(grand);
+        updateHeight(parent);
+    }
+
+    /**
+     * 右旋转
+     * @param node
+     */
+    private void rotateRight(Node<E> node){
+
     }
 
     @Override

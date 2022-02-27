@@ -69,6 +69,7 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
         if (node == null) {
             return;
         }
+        size--;
         if (node.hasTwoChildren()) {//度为2的节点
             //找到它的前驱或者后继节点  这里用后继节点
             Node<E> successor = successor(node);
@@ -87,6 +88,7 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
             } else {
                 node.parent.right = replacementNode;
             }
+            afterRemove(node);
         } else {//删除的是叶子节点
             if (node.parent == null) {//root节点
                 root = null;
@@ -95,7 +97,12 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
             } else {
                 node.parent.right = null;
             }
+            afterRemove(node);
         }
+    }
+
+    protected void afterRemove(Node<E> node){
+
     }
 
     private Node<E> node(E element) {

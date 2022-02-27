@@ -1,7 +1,10 @@
 package com.zhangxiang.lesson.tree.main;
 
+import com.zhangxiang.lesson.tree.AVLTree;
 import com.zhangxiang.lesson.tree.BinarySearchTree;
 import com.zhangxiang.lesson.tree.printer.BinaryTrees;
+
+import java.util.Comparator;
 
 /**
  * @author: zhangxiang
@@ -10,14 +13,14 @@ import com.zhangxiang.lesson.tree.printer.BinaryTrees;
  */
 public class BinarySearchTreeMain {
     public static void main(String[] args) {
-        Integer[] data = new Integer[]{7,4,9,2,5,8,11,1};
+        /*Integer[] data = new Integer[]{7, 4, 9, 2, 5, 8, 11, 1};
         BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
-        /*BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>(new Comparator<Integer>() {
+        BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
                 return o2.intValue() - o1.intValue();
             }
-        });*/
+        });
         for (int i = 0; i < data.length; i++) {
             binarySearchTree.add(data[i]);
         }
@@ -32,6 +35,17 @@ public class BinarySearchTreeMain {
         binarySearchTree.levelOrderTraversal(node -> System.out.println(node.element));
 
         System.out.println(binarySearchTree.height());
-        System.out.println(binarySearchTree.isComplete());
+        System.out.println(binarySearchTree.isComplete());*/
+
+        AVLTree<Integer> avlTree = new AVLTree<>();
+        for (int i = 0; i < 19; i++) {
+            avlTree.add(i);
+        }
+
+        BinaryTrees.println(avlTree);
+        for (int i = 0; i < 19; i++) {
+            avlTree.remove(i);
+            BinaryTrees.println(avlTree);
+        }
     }
 }

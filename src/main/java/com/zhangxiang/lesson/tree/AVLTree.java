@@ -40,7 +40,7 @@ public class AVLTree<E> extends BBSTree<E> {
      * @param node
      */
     @Override
-    protected void afterRemove(Node<E> node) {
+    protected void afterRemove(Node<E> node,Node<E> replacementNode) {
         while ((node = node.parent) != null) {
             //平衡
             if (isBalanced(node)) {

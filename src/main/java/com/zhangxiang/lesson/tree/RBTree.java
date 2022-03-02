@@ -71,8 +71,25 @@ public class RBTree<E> extends BBSTree<E> {
     }
 
     @Override
-    protected void afterRemove(Node<E> node) {
-        super.afterRemove(node);
+    protected void afterRemove(Node<E> node,Node<E> replacementNode) {
+        //被删除的是红色 不用处理
+        if(isRed(node)){
+            return;
+        }
+        //删的黑色 并且 用于取代的节点是红色
+        if(isRed(replacementNode)){
+            black(replacementNode);
+            return;
+        }
+        //删除的是根节点
+        if(node.parent == null){
+            return;
+        }
+        //删除的是黑色叶子结点
+
+
+
+
     }
 
     /**
@@ -123,5 +140,16 @@ public class RBTree<E> extends BBSTree<E> {
         public RBNode(E element, Node<E> parent) {
             super(element, parent);
         }
+
+
+    }
+
+    @Override
+    public Object string(Object node) {
+        String str = "";
+        if (((RBNode<E>)node).color == RED) {
+            str = "R_";
+        }
+        return str + ((RBNode<E>)node).element.toString();
     }
 }

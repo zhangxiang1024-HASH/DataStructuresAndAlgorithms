@@ -318,6 +318,20 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         public boolean isRightChild() {
             return parent != null && this == parent.right;
         }
+
+        /**
+         * 返回兄弟节点
+         * @return
+         */
+        public Node<E> sibling() {
+            if (isLeftChild()) {
+                return parent.right;
+            }
+            if (isRightChild()) {
+                return parent.left;
+            }
+            return null;
+        }
     }
 
     protected Node<E> createNode(E element, Node<E> parent) {

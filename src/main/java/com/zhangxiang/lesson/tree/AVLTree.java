@@ -5,9 +5,9 @@ import java.util.Comparator;
 /**
  * @author: zhangxiang
  * @createTime: 2022年02月22日 19:21:41
- * @desc: 二叉平衡查找树
+ * @desc: AVL树(一种自平衡的二叉搜索树)
  */
-public class AVLTree<E> extends BinarySearchTree<E> {
+public class AVLTree<E> extends BBSTree<E> {
     public AVLTree() {
         this(null);
     }
@@ -53,6 +53,14 @@ public class AVLTree<E> extends BinarySearchTree<E> {
         }
     }
 
+    @Override
+    protected void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
+        super.afterRotate(grand, parent, child);
+        //更新高度
+        updateHeight(grand);
+        updateHeight(parent);
+    }
+
     /**
      *
      * @param grand 高度最低的 失衡节点
@@ -77,54 +85,7 @@ public class AVLTree<E> extends BinarySearchTree<E> {
         }
     }
 
-    /**
-     * 左旋转
-     * @param grand
-     */
-    private void rotateLeft(Node<E> grand) {
-        Node<E> parent = grand.right;
-        Node<E> child = parent.left;
-        grand.right = child;
-        parent.left = grand;
 
-        afterRotate(grand, parent, child);
-    }
-
-    /**
-     * 右旋转
-     *
-     * @param grand
-     */
-    private void rotateRight(Node<E> grand) {
-        Node<E> parent = grand.left;
-        Node<E> child = parent.right;
-        grand.left = child;
-        parent.right = grand;
-
-        afterRotate(grand, parent, child);
-    }
-
-    private void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
-        //更新 parent的parent
-        parent.parent = grand.parent;
-        if (grand.isLeftChild()) {
-            grand.parent.left = parent;
-        } else if (grand.isRightChild()) {
-            grand.parent.right = parent;
-        } else {//根节点
-            root = parent;
-        }
-        //更新child的 parent
-        if (child != null) {
-            child.parent = grand;
-        }
-        //更新grand的parent
-        grand.parent = parent;
-
-        //更新高度
-        updateHeight(grand);
-        updateHeight(parent);
-    }
 
     @Override
     protected Node<E> createNode(E element, Node<E> parent) {

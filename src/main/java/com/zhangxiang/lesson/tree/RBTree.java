@@ -82,12 +82,40 @@ public class RBTree<E> extends BBSTree<E> {
             return;
         }
         //删除的是根节点
-        if(node.parent == null){
+        Node<E> parent = node.parent;
+        if(parent == null){
             return;
         }
         //删除的是黑色叶子结点
+        //判断被删除的node是左孩子还是孩子
+        boolean left = parent.left == null;
+        //拿到兄弟节点
+        Node<E> sibling = left ? parent.right : parent.left;
+        if(left){
 
+        }else {//被删除的节点在右边，兄弟在左边
+            if(isRed(sibling)){//如果兄弟节点是红色，那么将parent右旋
+                black(sibling);
+                red(parent);
+                rotateRight(parent);
+                //旋转后兄弟节点变了，更新兄弟节点
+                sibling = parent.left; //此时兄弟节点一定是黑色
+            }
+            //兄弟节点是黑色
+            if(isBlack(sibling.left) && isBlack(sibling.right)){
+                //此时兄弟节点子节点都是黑色 不能向兄弟节点借 发生下溢
+                red(sibling);
+                //记录parent的颜色，如果是黑色 parent也会发生下溢
+                boolean colorOfParent = isBlack(parent);
+                black(parent);
+                if(colorOfParent){
+                    afterRemove(parent,null);
+                }
+            }else {
 
+            }
+
+        }
 
 
     }

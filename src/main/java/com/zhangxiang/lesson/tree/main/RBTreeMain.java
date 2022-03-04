@@ -15,6 +15,9 @@ public class RBTreeMain {
         for (Integer integer : data) {
             rbTree.add(integer);
         }
-        BinaryTrees.println(rbTree);
+        for (int i = 0; i < data.length; i++) {
+            rbTree.remove(data[i]);
+            BinaryTrees.println(rbTree);
+        }
     }
 }

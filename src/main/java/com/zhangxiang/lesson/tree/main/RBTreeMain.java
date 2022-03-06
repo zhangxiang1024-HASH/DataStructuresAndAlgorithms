@@ -3,6 +3,8 @@ package com.zhangxiang.lesson.tree.main;
 import com.zhangxiang.lesson.tree.RBTree;
 import com.zhangxiang.lesson.tree.printer.BinaryTrees;
 
+import java.util.HashSet;
+
 /**
  * @author: zhangxiang
  * @createTime: 2022年03月02日 19:26:25

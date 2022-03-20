@@ -14,12 +14,41 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
     private E[] elements;
 
     public BinaryHeap() {
-        this(null);
+        this(null, null);
     }
 
     public BinaryHeap(Comparator<E> comparator) {
+        this(null, comparator);
+    }
+
+    public BinaryHeap(E[] elements) {
+        this(elements, null);
+    }
+
+    public BinaryHeap(E[] elements, Comparator<E> comparator) {
         super(comparator);
-        elements = (E[]) new Object[DEFAULT_CAPACITY];
+        if (elements == null || elements.length == 0) {
+            this.elements = (E[]) new Object[DEFAULT_CAPACITY];
+        } else {
+            size = elements.length;
+            this.elements = (E[]) new Object[Math.max(DEFAULT_CAPACITY, size)];
+            for (int i = 0; i < elements.length; i++) {
+                this.elements[i] = elements[i];
+            }
+            heapify();
+        }
+    }
+
+    /**
+     * 批量建堆
+     */
+    private void heapify() {
+        /**
+         * 自下而上的下滤
+         */
+        for (int i = (size >> 1) - 1; i >= 0; i--) {
+            siftDown(i);
+        }
     }
 
     @Override
@@ -94,10 +123,10 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
     public E replace(E element) {
         elementNotNullCheck(element);
         E root = null;
-        if(size == 0){
+        if (size == 0) {
             elements[0] = element;
             size++;
-        }else {
+        } else {
             root = elements[0];
             elements[0] = element;
             siftDown(0);

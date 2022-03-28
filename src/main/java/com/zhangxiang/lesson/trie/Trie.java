@@ -1,5 +1,7 @@
 package com.zhangxiang.lesson.trie;
 
+import com.sun.tools.javac.util.Assert;
+
 import java.util.HashMap;
 
 /**
@@ -75,7 +77,8 @@ public class Trie<V> {
         for (int i = key.length() - 1; i >= 0; i--) {
             String substring = key.substring(0, i);
             Node<V> vNode = node(substring);
-            vNode.getChildren().remove(key.charAt(i));
+            assert vNode != null;
+            vNode.children.remove(key.charAt(i));
             if (!vNode.children.isEmpty()) {
                 return oldValue;
             }

@@ -4,6 +4,7 @@ import com.zhangxiang.lesson.tree.printer.BinaryTreeInfo;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * @author: zhangxiang
@@ -73,6 +74,30 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     }
 
     /**
+     * 非递归前序遍历: 根节点、左子树、右子树
+     */
+    public void preorderTraversal2(Visitor<E> visitor) {
+        if (visitor == null || null == root) {
+            return;
+        }
+        Stack<Node<E>> stack = new Stack<>();
+        Node<E> node = root;
+        while (true) {
+            if (node != null) {
+                visitor.visit(node);
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+                node = node.left;
+            } else if (stack.isEmpty()) {
+                return;
+            } else {
+                node = stack.pop();
+            }
+        }
+    }
+
+    /**
      * 中序遍历：左子树、根节点、右子树
      */
     public void inorderTraversal(Visitor<E> visitor) {
@@ -89,6 +114,15 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         inorderTraversal(node.left, visitor);
         visitor.visit(node);
         inorderTraversal(node.right, visitor);
+    }
+
+    /**
+     * 非递归中序遍历：左子树、根节点、右子树
+     */
+    public void inorderTraversal2(Visitor<E> visitor) {
+        if (visitor == null) {
+            return;
+        }
     }
 
     /**

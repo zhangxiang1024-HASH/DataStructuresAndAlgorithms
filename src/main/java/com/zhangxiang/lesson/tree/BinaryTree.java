@@ -120,8 +120,22 @@ public class BinaryTree<E> implements BinaryTreeInfo {
      * 非递归中序遍历：左子树、根节点、右子树
      */
     public void inorderTraversal2(Visitor<E> visitor) {
-        if (visitor == null) {
+        if (visitor == null || null == root) {
             return;
+        }
+        Stack<Node<E>> stack = new Stack<>();
+        Node<E> node = root;
+        while (true) {
+            if (node != null) {
+                stack.push(node);
+                node = node.left;
+            } else if (stack.isEmpty()) {
+                return;
+            } else {
+                node = stack.pop();
+                visitor.visit(node);
+                node = node.right;
+            }
         }
     }
 
@@ -142,6 +156,32 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         postorderTraversal(node.left, visitor);
         postorderTraversal(node.right, visitor);
         visitor.visit(node);
+    }
+
+    /**
+     * 非递归后序遍历：左子树、右子树、根节点
+     */
+    public void postorderTraversal2(Visitor<E> visitor) {
+        if (visitor == null || null == root) {
+            return;
+        }
+        Node<E> prev = null;
+        Stack<Node<E>> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node<E> top = stack.peek();
+            if (top.isLeaf() || (prev != null && prev.parent == top)) {
+                prev = stack.pop();
+                visitor.visit(prev);
+            } else {
+                if (top.right != null) {
+                    stack.push(top.right);
+                }
+                if (top.left != null) {
+                    stack.push(top.left);
+                }
+            }
+        }
     }
 
     /**

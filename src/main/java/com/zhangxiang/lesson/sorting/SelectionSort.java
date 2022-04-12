@@ -5,12 +5,12 @@ package com.zhangxiang.lesson.sorting;
  * @createTime: 2022年04月05日 18:06:27
  * @desc:
  */
-public class SelectionSort extends Sort{
+public class SelectionSort<E extends Comparable<E>> extends Sort<E>{
 
     @Override
     protected void sort() {
         for (int end = array.length - 1; end > 0; end--) {
-            int maxIndex = array[0];
+            int maxIndex = 0;
             for (int begin = 1; begin <= end ; begin++) {
                 if(cmp(maxIndex,begin) <= 0){
                     //每轮选择最大的值和尾部交换

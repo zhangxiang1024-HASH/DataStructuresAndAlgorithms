@@ -5,7 +5,7 @@ package com.zhangxiang.lesson.sorting;
  * @createTime: 2022年04月01日 21:01:01
  * @desc:
  */
-public class BubbleSort extends Sort{
+public class BubbleSort<E extends Comparable<E>> extends Sort<E>{
 
     @Override
     protected void sort() {

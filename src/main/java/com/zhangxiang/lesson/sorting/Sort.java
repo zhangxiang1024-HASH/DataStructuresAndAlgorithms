@@ -18,6 +18,10 @@ public abstract class Sort<E extends Comparable<E>>{
         sort();
     }
 
+    public void setArray(E[] array){
+        this.array = array;
+    }
+
     protected abstract void sort();
 
     protected int cmp(int l1, int l2) {

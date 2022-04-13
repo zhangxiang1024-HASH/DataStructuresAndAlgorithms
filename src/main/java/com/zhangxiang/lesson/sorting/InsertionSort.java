@@ -27,7 +27,7 @@ public class InsertionSort<E extends Comparable<E>> extends Sort<E>{
     protected void sort() {
         for (int begin = 1; begin < array.length; begin++) {
             E e = array[begin];
-            int swapIndex = binarySearch(begin, e);
+            int swapIndex = binarySearch(begin);
             for (int i = begin -1; i >= swapIndex ; i--) {
                 array[i+1] = array[i];
             }
@@ -35,20 +35,18 @@ public class InsertionSort<E extends Comparable<E>> extends Sort<E>{
         }
     }
 
-    private int binarySearch(int begin,E e) {
+    private int binarySearch(int begin) {
         int binaryBegin = 0;
         int binaryEnd = begin;
-        while (binaryBegin < binaryEnd){
+        E e = array[begin];
+        while (binaryBegin < binaryEnd) {
             int mid = (binaryBegin + binaryEnd) >> 1;
-            boolean b = cmp(e, array[mid]) < 0;
-            if(mid == 0 || (b && cmp(e,array[mid -1]) > 0)){
-                return mid;
-            }else if(b){
+            if (cmp(e, array[mid]) < 0) {
                 binaryEnd = mid;
-            }else {
+            } else {
                 binaryBegin = mid + 1;
             }
         }
-        return 0;
+        return binaryBegin;
     }
 }

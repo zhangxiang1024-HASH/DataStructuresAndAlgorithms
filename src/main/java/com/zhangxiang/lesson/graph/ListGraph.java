@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class ListGraph<V, E> extends Graph<V, E> {
     private Map<V, Vertex<V, E>> vertices = new HashMap<>();
     private Set<Edge<V, E>> edges = new HashSet<>();
-    private Comparator<Edge<V,E>> edgeComparator =(Edge<V,E> e1,Edge<V,E> e2)-> weightManager.compare(e1.weight,e2.weight);
+    private Comparator<Edge<V, E>> edgeComparator = (Edge<V, E> e1, Edge<V, E> e2) -> weightManager.compare(e1.weight, e2.weight);
 
 
     public ListGraph(WeightManager<E> weightManager) {
@@ -185,7 +185,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
         return kruskal();
     }
 
-    private Set<EdgeInfo<V,E>> prim(){
+    private Set<EdgeInfo<V, E>> prim() {
         Iterator<Vertex<V, E>> iterator = vertices.values().iterator();
         if (!iterator.hasNext()) {
             return new HashSet<>();
@@ -208,22 +208,23 @@ public class ListGraph<V, E> extends Graph<V, E> {
         return edgeInfos;
     }
 
-    private Set<EdgeInfo<V,E>> kruskal(){
+    private Set<EdgeInfo<V, E>> kruskal() {
         int edgeSize = vertices.size() - 1;
-        if(edgeSize <= 1){
+        if (edgeSize <= 1) {
             return new HashSet<>();
         }
+        //初始化并查集
+        UnionFind<Vertex<V, E>> unionFind = new UnionFind<>();
+        vertices.forEach((v, vertex) -> unionFind.makeSet(vertex));
         HashSet<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
-        HashSet<Vertex<V, E>> addedVertices = new HashSet<>();
         MinHeap<Edge<V, E>> minHeap = new MinHeap<>(edges, edgeComparator);
         while (!minHeap.isEmpty() && edgeInfos.size() < edgeSize) {
             Edge<V, E> edge = minHeap.remove();
-            if (addedVertices.contains(edge.to) && addedVertices.contains(edge.from)) {
+            if (unionFind.isSame(edge.from, edge.to)) {
                 continue;
             }
             edgeInfos.add(edge.edgeInfo());
-            addedVertices.add(edge.to);
-            addedVertices.add(edge.from);
+            unionFind.union(edge.from, edge.to);
         }
         return edgeInfos;
     }
@@ -293,7 +294,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
             this(from, to, null);
         }
 
-        public EdgeInfo<V,E> edgeInfo(){
+        public EdgeInfo<V, E> edgeInfo() {
             return new EdgeInfo<>(from.value, to.value, weight);
         }
 
@@ -323,11 +324,11 @@ public class ListGraph<V, E> extends Graph<V, E> {
                 return w1 + w2;
             }
         });
-        String[] arr = {"0,4,7", "0,2,2", "2,4,4", "2,1,3", "2,6,6", "2,5,3", "1,5,1","5,6,4","5,7,5","3,7,9"};
+        String[] arr = {"0,4,7", "0,2,2", "2,4,4", "2,1,3", "2,6,6", "2,5,3", "1,5,1", "5,6,4", "5,7,5", "3,7,9"};
         for (String s : arr) {
             String[] strings = s.split(",");
-            listGraph.addEdge(Integer.parseInt(strings[0]), Integer.parseInt(strings[1]),Integer.parseInt(strings[2]));
-            listGraph.addEdge(Integer.parseInt(strings[1]), Integer.parseInt(strings[0]),Integer.parseInt(strings[2]));
+            listGraph.addEdge(Integer.parseInt(strings[0]), Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
+            listGraph.addEdge(Integer.parseInt(strings[1]), Integer.parseInt(strings[0]), Integer.parseInt(strings[2]));
         }
         //listGraph.dfs(1, System.out::println);
         System.out.println(listGraph.mst());

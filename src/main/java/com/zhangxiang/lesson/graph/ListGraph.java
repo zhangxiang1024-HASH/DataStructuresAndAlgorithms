@@ -11,6 +11,12 @@ import java.util.function.Consumer;
 public class ListGraph<V, E> extends Graph<V, E> {
     private Map<V, Vertex<V, E>> vertices = new HashMap<>();
     private Set<Edge<V, E>> edges = new HashSet<>();
+    private Comparator<Edge<V,E>> edgeComparator =(Edge<V,E> e1,Edge<V,E> e2)-> weightManager.compare(e1.weight,e2.weight);
+
+
+    public ListGraph(WeightManager<E> weightManager) {
+        super(weightManager);
+    }
 
     @Override
     public int edgesSize() {
@@ -148,6 +154,80 @@ public class ListGraph<V, E> extends Graph<V, E> {
         }
     }
 
+    @Override
+    public List<V> topologicalSort() {
+        List<V> topologicalSortList = new ArrayList<>();
+        Queue<Vertex<V, E>> queue = new LinkedList<>();
+        Map<Vertex<V, E>, Integer> ins = new HashMap<>();
+        vertices.forEach((V v, Vertex<V, E> vertex) -> {
+            if (vertex.inEdges.size() == 0) {
+                queue.offer(vertex);
+            } else {
+                ins.put(vertex, vertex.inEdges.size());
+            }
+        });
+        while (!queue.isEmpty()) {
+            Vertex<V, E> vertex = queue.poll();
+            topologicalSortList.add(vertex.value);
+            Integer in = ins.get(vertex) - 1;
+            if (in == 0) {
+                queue.offer(vertex);
+            } else {
+                ins.put(vertex, in);
+            }
+        }
+        return topologicalSortList;
+    }
+
+    @Override
+    public Set<EdgeInfo<V, E>> mst() {
+        //return prim();
+        return kruskal();
+    }
+
+    private Set<EdgeInfo<V,E>> prim(){
+        Iterator<Vertex<V, E>> iterator = vertices.values().iterator();
+        if (!iterator.hasNext()) {
+            return new HashSet<>();
+        }
+        Set<Vertex<V, E>> addedVertex = new HashSet<>();
+        HashSet<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
+        Vertex<V, E> vertex = iterator.next();
+        addedVertex.add(vertex);
+        MinHeap<Edge<V, E>> minHeap = new MinHeap<>(vertex.outEdges, edgeComparator);
+        int verticesSize = vertices.size();
+        while (!minHeap.isEmpty() && addedVertex.size() < verticesSize) {
+            Edge<V, E> edge = minHeap.remove();
+            if (addedVertex.contains(edge.to)) {
+                continue;
+            }
+            edgeInfos.add(edge.edgeInfo());
+            addedVertex.add(edge.to);
+            minHeap.addAll(edge.to.outEdges);
+        }
+        return edgeInfos;
+    }
+
+    private Set<EdgeInfo<V,E>> kruskal(){
+        int edgeSize = vertices.size() - 1;
+        if(edgeSize <= 1){
+            return new HashSet<>();
+        }
+        HashSet<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
+        HashSet<Vertex<V, E>> addedVertices = new HashSet<>();
+        MinHeap<Edge<V, E>> minHeap = new MinHeap<>(edges, edgeComparator);
+        while (!minHeap.isEmpty() && edgeInfos.size() < edgeSize) {
+            Edge<V, E> edge = minHeap.remove();
+            if (addedVertices.contains(edge.to) && addedVertices.contains(edge.from)) {
+                continue;
+            }
+            edgeInfos.add(edge.edgeInfo());
+            addedVertices.add(edge.to);
+            addedVertices.add(edge.from);
+        }
+        return edgeInfos;
+    }
+
     /**
      * 递归DFS
      *
@@ -213,6 +293,10 @@ public class ListGraph<V, E> extends Graph<V, E> {
             this(from, to, null);
         }
 
+        public EdgeInfo<V,E> edgeInfo(){
+            return new EdgeInfo<>(from.value, to.value, weight);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -228,13 +312,24 @@ public class ListGraph<V, E> extends Graph<V, E> {
     }
 
     public static void main(String[] args) {
-        ListGraph<Integer, Integer> listGraph = new ListGraph<>();
-        String[] arr = {"3,7", "3,1", "1,0", "1,5", "1,2", "1,6", "2,4"};
+        ListGraph<Integer, Integer> listGraph = new ListGraph<>(new WeightManager<Integer>() {
+            @Override
+            public int compare(Integer w1, Integer w2) {
+                return w1.compareTo(w2);
+            }
+
+            @Override
+            public Integer add(Integer w1, Integer w2) {
+                return w1 + w2;
+            }
+        });
+        String[] arr = {"0,4,7", "0,2,2", "2,4,4", "2,1,3", "2,6,6", "2,5,3", "1,5,1","5,6,4","5,7,5","3,7,9"};
         for (String s : arr) {
             String[] strings = s.split(",");
-            listGraph.addEdge(Integer.parseInt(strings[0]), Integer.parseInt(strings[1]));
-            listGraph.addEdge(Integer.parseInt(strings[1]), Integer.parseInt(strings[0]));
+            listGraph.addEdge(Integer.parseInt(strings[0]), Integer.parseInt(strings[1]),Integer.parseInt(strings[2]));
+            listGraph.addEdge(Integer.parseInt(strings[1]), Integer.parseInt(strings[0]),Integer.parseInt(strings[2]));
         }
-        listGraph.dfs(1, System.out::println);
+        //listGraph.dfs(1, System.out::println);
+        System.out.println(listGraph.mst());
     }
 }

@@ -1,6 +1,8 @@
 package com.zhangxiang.lesson.graph;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -60,6 +62,8 @@ public abstract class Graph<V, E> {
      */
     public abstract Set<EdgeInfo<V, E>> mst();
 
+    public abstract Map<V,PathInfo<V,E>> shortestPath(V begin);
+
     public interface WeightManager<E> {
         int compare(E w1, E w2);
 
@@ -88,5 +92,12 @@ public abstract class Graph<V, E> {
                     ", weight=" + weight +
                     '}';
         }
+    }
+
+    public static class PathInfo<V,E>{
+        E weight;
+        List<EdgeInfo<V,E>> paths = new LinkedList<>();
+
+
     }
 }

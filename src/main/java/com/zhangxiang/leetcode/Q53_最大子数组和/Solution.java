@@ -30,4 +30,25 @@ public class Solution {
         //继续递归调用 每个问题的最大子数组等于 左边最大子数组、右边最大子数组、两边数组一起合成的最大子数组 中的最大值
         return Math.max(leftMax + rightMax, Math.max(maxSubArray(nums, begin, mid), maxSubArray(nums, mid, end)));
     }
+
+    /**
+     * 定义dp[i]是以nums[i]结尾的最大子序列之和
+     * dp[n] = dp[n-1] <=0?nums[n]:dp[n-1]+nums[n]
+     *
+     * @param nums
+     * @return
+     */
+    public int maxSubArray1(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int max = dp[0];
+        for (int i = 1; i < dp.length; i++) {
+            dp[i] = dp[i - 1] <= 0 ? nums[i] : dp[i - 1] + nums[i];
+            max = Math.max(dp[i], max);
+        }
+        return max;
+    }
 }

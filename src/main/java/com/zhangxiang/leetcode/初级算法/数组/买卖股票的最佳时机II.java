@@ -1,4 +1,4 @@
-package com.zhangxiang.leetcode.初级算法;
+package com.zhangxiang.leetcode.初级算法.数组;
 
 /**
  * @author: zhangxiang
